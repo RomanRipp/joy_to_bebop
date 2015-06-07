@@ -13,8 +13,8 @@
 #include "ros/ros.h"
 #include "JoyToBebop.h"
 
-#include "../../Utility/Exceptions.h"
-#include "../../Utility/SharedConstants.h"
+#include "Utility/Exceptions.h"
+#include "Utility/SharedConstants.h"
 
 namespace Roman{
 namespace BebopDroneApi{
@@ -28,7 +28,7 @@ namespace BebopDroneApi{
 		, _deadZone(0.0)
 		, _buttons(20, 0)
 		, _axis(4, 0.0)
-
+		, _sendZero(true)
 	{
 		const auto& axisValueRange = (JoystickParams::Axes::MAX + std::abs(JoystickParams::Axes::MIN));
 		const auto& a = std::log10(BebopParams::Controls::MAXTHRUST);
@@ -61,7 +61,22 @@ namespace BebopDroneApi{
 		if (axes.size() != 4)
 			throw Exceptions::Critical("Invalid axes values");
 
-		if (!_IsZero(axes))
+		if (_IsZero(axes))
+		{
+			if (_sendZero)
+			{
+				//Publish zeros once;
+				nav_msgs::Odometry rpyg;
+				rpyg.twist.twist.linear.x = 0.0;
+				rpyg.twist.twist.linear.y = 0.0;
+				rpyg.twist.twist.linear.z = 0.0;
+				rpyg.pose.pose.position.z = 0.0;
+
+				_controls.publish(rpyg);
+				_sendZero = false;
+			}
+		}
+		else
 		{
 			_Exp(axes);
 
@@ -72,6 +87,7 @@ namespace BebopDroneApi{
 			rpyg.pose.pose.position.z = (-1) * axes.at(1);
 
 			_controls.publish(rpyg);
+			_sendZero = true;
 		}
 	}
 

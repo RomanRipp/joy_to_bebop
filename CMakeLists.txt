@@ -93,13 +93,15 @@ catkin_package(
 ###########
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+set(workspace_DIR /Users/romanripp/documents/eclipse/Cworkspace)
+set(rosWorkspace_DIR ${workspace_DIR}/rosWorkspace)
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
+
+include_directories(${catkin_INCLUDE_DIRS})
+include_directories(${rosWorkspace_DIR}/src)
 
 ## Declare a cpp executable
 add_executable(joy_to_bebop src/main.cpp src/JoyToBebop.cpp)

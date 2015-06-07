@@ -39,6 +39,7 @@ private:
 	float _slope;
 	float _deadZone;
 
+	mutable bool _sendZero;
 	mutable std::vector<int32_t> _buttons;
 	mutable std::vector<float> _axis;
 };
