@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
 
   ros::init(argc, argv, "joy_to_bebop");
 
-  Roman::BebopDroneApi::JoyToBebop joyToBebop;
+  roman::bebop::JoyToBebop joyToBebop;
 
   ros::spin();
 
