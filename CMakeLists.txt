@@ -93,7 +93,7 @@ catkin_package(
 ###########
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
-set(workspace_DIR /Users/romanripp/documents/eclipse/Cworkspace)
+set(workspace_DIR /Users/Roman/Documents/eclipse/Cworkspace)
 set(rosWorkspace_DIR ${workspace_DIR}/rosWorkspace)
 
 ## Specify additional locations of header files
@@ -104,7 +104,7 @@ include_directories(${catkin_INCLUDE_DIRS})
 include_directories(${rosWorkspace_DIR}/src)
 
 ## Declare a cpp executable
-add_executable(joy_to_bebop src/main.cpp src/JoyToBebop.cpp)
+add_executable(joy_to_bebop src/main.cpp src/joy_to_bebop.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

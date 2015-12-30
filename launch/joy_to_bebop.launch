@@ -1,2 +1,6 @@
 <launch>
+	<group name="joystick">
+		<node pkg="osx_joystick" name="joystick" type="osx_joystick" args="--num 0 --hz 30" required="true" output="screen"/>
+		<node pkg="joy_to_bebop" name="bebop_converter" type="joy_to_bebop" required="true" output="screen" />
+	</group>
 </launch>
