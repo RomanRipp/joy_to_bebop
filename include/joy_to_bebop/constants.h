@@ -28,11 +28,11 @@ namespace bebop_params {
 }
 
 namespace topics {
-	static const std::string RPYG("bebop/cmd_vel");
-	static const std::string CAMERA("bebop/camera_control");
-	static const std::string EMERGENCY("bebop/reset");
-	static const std::string TAKEOFF("bebop/takeoff");
-	static const std::string LAND("bebop/land");
+	static const std::string RPYG("cmd_vel");
+	static const std::string CAMERA("camera_control");
+	static const std::string EMERGENCY("reset");
+	static const std::string TAKEOFF("takeoff");
+	static const std::string LAND("land");
 }
 }
 }

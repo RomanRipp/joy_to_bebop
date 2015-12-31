@@ -17,7 +17,7 @@ namespace roman {
 namespace bebop {
 
 JoyToBebop::JoyToBebop()
-    : m_joystick(m_handle.subscribe("joy0", 50, &JoyToBebop::OnJoystick, this)),
+    : m_joystick(m_handle.subscribe("joy", 50, &JoyToBebop::OnJoystick, this)),
       m_controls(
           m_handle.advertise<geometry_msgs::Twist>(topics::RPYG, 50)),
 	  m_camera(
@@ -54,41 +54,19 @@ void JoyToBebop::OnJoystick(const sensor_msgs::Joy &msg) const {
 }
 
 void JoyToBebop::HandleAxes(std::vector<float> axes) const {
-  if (axes.size() != 4) {
-	  ROS_ERROR("Invalid axes values");
-	  return;
-  }
 
-  if (IsZero(axes)) {
-      // Publish zeros once;
-      geometry_msgs::Twist rpyg;
-      rpyg.linear.x = 0.0f;
-      rpyg.linear.y = 0.0f;
-      rpyg.linear.z = 0.0f;
-      rpyg.angular.z = 0.0f;
-
-      m_controls.publish(rpyg);
-    //}
-  } else {
-    Exp(axes);
-
-    geometry_msgs::Twist rpyg;
-    rpyg.linear.x = (-1) * axes.at(3);
-    rpyg.linear.y = (-1) * axes.at(2);
-    rpyg.linear.z = (-1) * axes.at(1);
-    rpyg.angular.z = axes.at(0);
+	geometry_msgs::Twist rpyg;
+    rpyg.linear.x =  axes.at(3);
+    rpyg.linear.y =  axes.at(2);
+    rpyg.linear.z =  axes.at(1);
+    rpyg.angular.z = (-1) * axes.at(0);
 
     m_controls.publish(rpyg);
-  }
 }
 
 void JoyToBebop::HandleButtons(const std::vector<int32_t> &buttons) const {
-  if (buttons.size() != 20) {
-    ROS_ERROR("Invalid buttons");
-    return;
-  }
 
-  if (IsPushed(13, buttons)) {
+	if (IsPushed(13, buttons)) {
     m_emergency.publish(std_msgs::Empty());
   }
   if (IsPushed(12, buttons)) {
@@ -109,31 +87,31 @@ void JoyToBebop::HandleButtons(const std::vector<int32_t> &buttons) const {
 	  m_cameraTwist.angular.z = 0.0f;
 	  m_camera.publish(m_cameraTwist);
   }
-  if (IsPressed(4, buttons)) {
+  if (IsPushed(6, buttons)) {
 	  //tilt camera up
 	  if (m_cameraTwist.angular.y > bebop_params::MIN_CAMERA_TILT_VERTICAL) {
-		  m_cameraTwist.angular.y--;
+		  m_cameraTwist.angular.y-=5;
 		  m_camera.publish(m_cameraTwist);
 	  }
   }
-  if (IsPressed(5, buttons)) {
+  if (IsPushed(7, buttons)) {
 	  //tilt camera right
 	  if (m_cameraTwist.angular.z > bebop_params::MIN_CAMERA_TILT_HORIZONTAL) {
-		  m_cameraTwist.angular.z--;
+		  m_cameraTwist.angular.z-=5;
 		  m_camera.publish(m_cameraTwist);
 	  }
   }
-  if (IsPressed(6, buttons)) {
+  if (IsPushed(4, buttons)) {
 	  //tilt camera down
 	  if (m_cameraTwist.angular.y < bebop_params::MAX_CAMERA_TILT_VERTICAL) {
-		  m_cameraTwist.angular.y++;
+		  m_cameraTwist.angular.y+=5;
 		  m_camera.publish(m_cameraTwist);
 	  }
   }
-  if (IsPressed(7, buttons)) {
+  if (IsPushed(5, buttons)) {
 	  //tilt camera left
 	  if (m_cameraTwist.angular.z < bebop_params::MAX_CAMERA_TILT_HORIZONTAL) {
-		  m_cameraTwist.angular.z++;
+		  m_cameraTwist.angular.z+=5;
 		  m_camera.publish(m_cameraTwist);
 	  }
   }
